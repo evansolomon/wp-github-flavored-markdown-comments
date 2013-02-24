@@ -1,9 +1,9 @@
 <?php
 
 /*
-Plugin Name: Github-Flavored Markdown Comments
+Plugin Name: GitHub-Flavored Markdown Comments
 Plugin URI: https://github.com/evansolomon/wp-github-flavored-markdown-comments
-Description: Markdown-powered WordPress comments, with a Github Twist
+Description: Markdown-powered WordPress comments, with a GitHub Twist
 Version: 1.0
 Author: Evan Solomon
 Author URI: http://evansolomon.me/
@@ -15,7 +15,7 @@ if ( ! class_exists( 'MarkdownExtra_Parser' ) )
     include( __DIR__ . '/lib/markdown.php' );
 
 /**
- * Add a few extras from Github's Markdown implementation
+ * Add a few extras from GitHub's Markdown implementation
  * https://github.com/github/github-flavored-markdown
  */
 class ES_GHF_Markdown_Parser extends MarkdownExtra_Parser {
