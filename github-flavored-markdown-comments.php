@@ -99,7 +99,7 @@ class ES_GHF_Markdown_Comments {
 	}
 
 	public function ajax_preview() {
-		$text = isset( $_REQUEST['gfm_text'] ) ? isset( $_REQUEST['gfm_text'] ) : '';
+		$text = isset( $_REQUEST['gfm_text'] ) ? $_REQUEST['gfm_text'] : '';
 		echo $this->markdown( $text );
 
 		die();
