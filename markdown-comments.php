@@ -56,6 +56,9 @@ class ES_GHF_Markdown_Comments {
     protected $parser;
     private static $instance;
 
+    /**
+     * Maintain a reference to this object
+     */
     public static function get_instance() {
         if ( ! self::$instance )
             self::$instance = new self;
@@ -63,6 +66,9 @@ class ES_GHF_Markdown_Comments {
         return self::$instance;
     }
 
+    /**
+     * Setup plugin
+     */
     private function __construct() {
         add_action( 'init', array( $this, 'init' ) );
 
@@ -71,6 +77,7 @@ class ES_GHF_Markdown_Comments {
         @define( 'MARKDOWN_WP_COMMENTS', false );
     }
 
+    // Setup comment filtering
     public function init() {
         if ( ! $this->parser )
             $this->parser = new ES_GHF_Markdown_Parser;
@@ -80,9 +87,11 @@ class ES_GHF_Markdown_Comments {
         return $this;
     }
 
+    // Convert Markdown to HTML
     public function markdown( $text ) {
         return $this->parser->transform($text);
     }
 }
 
+// Do it
 ES_GHF_Markdown_Comments::get_instance();
