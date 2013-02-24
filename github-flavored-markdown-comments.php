@@ -72,6 +72,9 @@ class ES_GHF_Markdown_Comments {
 	private function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 
+		if ( apply_filters( 'gfm_preview', true ) )
+			add_action( 'wp_enqueue_scripts', array( $this, 'js_preview' ) );
+
 		// Support AJAX previews of Markdown'd text
 		add_action( 'wp_ajax_gfm_preview',        array( $this, 'ajax_preview' ) );
 		add_action( 'wp_ajax_nopriv_gfm_preview', array( $this, 'ajax_preview' ) );
@@ -92,6 +95,11 @@ class ES_GHF_Markdown_Comments {
 		// Markdown-ify comments
 		add_filter( 'pre_comment_content', array( $this, 'markdown' ) , 6  );
 		return $this;
+	}
+
+	public function js_preview() {
+		wp_enqueue_script( 'gfm-preview', plugins_url( 'markdown-preview.js', __FILE__ ), array( 'jquery', 'underscore' ), false, true );
+		wp_localize_script( 'gfm-preview', 'gfm_preview', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 	}
 
 	public function markdown( $text ) {
