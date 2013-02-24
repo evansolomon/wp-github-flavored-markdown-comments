@@ -73,7 +73,7 @@ class ES_GHF_Markdown_Comments {
 
     public function init() {
         if ( ! $this->parser )
-            $this->parser = new ES_GH_Markdown_Parser;
+            $this->parser = new ES_GHF_Markdown_Parser;
 
         // Markdown-ify comments
         add_filter( 'pre_comment_content', array( $this, 'markdown' ) , 6  );
