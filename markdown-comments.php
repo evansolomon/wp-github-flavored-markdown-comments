@@ -18,7 +18,7 @@ if ( ! class_exists( 'MarkdownExtra_Parser' ) )
  * Add a few extras from Github's Markdown implementation
  * https://github.com/github/github-flavored-markdown
  */
-class ES_GH_Markdown_Parser extends MarkdownExtra_Parser {
+class ES_GHF_Markdown_Parser extends MarkdownExtra_Parser {
     /**
      * Overload to enable single-newline paragraphs
      * https://github.com/github/github-flavored-markdown/blob/gh-pages/index.md#newlines
@@ -52,7 +52,7 @@ class ES_GH_Markdown_Parser extends MarkdownExtra_Parser {
 
 }
 
-class ES_Markdown_Comments {
+class ES_GHF_Markdown_Comments {
     protected $parser;
     private static $instance;
 
@@ -85,4 +85,4 @@ class ES_Markdown_Comments {
     }
 }
 
-ES_Markdown_Comments::get_instance();
+ES_GHF_Markdown_Comments::get_instance();
