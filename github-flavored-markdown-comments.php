@@ -72,6 +72,10 @@ class ES_GHF_Markdown_Comments {
 	private function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 
+		// Support AJAX previews of Markdown'd text
+		add_action( 'wp_ajax_gfm_preview',        array( $this, 'ajax_preview' ) );
+		add_action( 'wp_ajax_nopriv_gfm_preview', array( $this, 'ajax_preview' ) );
+
 		// Just in case another plugin loads the Markdown lib with the WP stuff turned on
 		@define( 'MARKDOWN_WP_POSTS', false );
 		@define( 'MARKDOWN_WP_COMMENTS', false );
@@ -92,6 +96,13 @@ class ES_GHF_Markdown_Comments {
 
 	public function markdown( $text ) {
 		return $this->parser->transform($text);
+	}
+
+	public function ajax_preview() {
+		$text = isset( $_REQUEST['gfm_text'] ) ? isset( $_REQUEST['gfm_text'] ) : '';
+		echo $this->markdown( $text );
+
+		die();
 	}
 }
 
