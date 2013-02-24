@@ -9,48 +9,54 @@ Author: Evan Solomon
 Author URI: http://evansolomon.me/
 */
 
-// Markdown library
-// From `extra` branch of https://github.com/michelf/php-markdown/
-if ( ! class_exists( 'MarkdownExtra_Parser' ) )
-    include( __DIR__ . '/lib/markdown.php' );
+// Wait to load the library in case another plugin tries to do the same but doesn't check
+add_action( 'init', function(){
+    // Base markdown library
+    if ( ! class_exists( 'Markdown_Parser' ) )
+        include( __DIR__ . '/lib/markdown.php' );
 
-/**
- * Add a few extras from GitHub's Markdown implementation
- * https://github.com/github/github-flavored-markdown
- */
-class ES_GHF_Markdown_Parser extends MarkdownExtra_Parser {
-    /**
-     * Overload to enable single-newline paragraphs
-     * https://github.com/github/github-flavored-markdown/blob/gh-pages/index.md#newlines
-     */
-    function formParagraphs( $text ) {
-        // Treat single linebreaks as double linebreaks
-        $text = preg_replace('#([^\n])\n([^\n])#', "$1\n\n$2", $text );
-        return parent::formParagraphs( $text );
-    }
+    // From `extra` branch of https://github.com/michelf/php-markdown/
+    if ( ! class_exists( 'MarkdownExtra_Parser' ) )
+        include( __DIR__ . '/lib/markdown-extra.php' );
 
     /**
-     * Overload to support ```-fenced code blocks
-     * https://github.com/github/github-flavored-markdown/blob/gh-pages/index.md#fenced-code-blocks
+     * Add a few extras from GitHub's Markdown implementation
+     * https://github.com/github/github-flavored-markdown
      */
-    function doCodeBlocks( $text ) {
-        $text = preg_replace_callback(
-            '#'       .
-            '^```'    . // Fenced code block
-            '[^\n]*$' . // No language-specific support yet
-            '\n'      . // Newline
-            '(.+?)'   . // Actual code here
-            '\n'      . // Last newline
-            '^```$'   . // End of block
-            '#ms',      // Multiline mode + dot matches newlines
-            array( $this, '_doCodeBlocks_callback' ),
-            $text
-        );
+    class ES_GHF_Markdown_Parser extends MarkdownExtra_Parser {
+        /**
+         * Overload to enable single-newline paragraphs
+         * https://github.com/github/github-flavored-markdown/blob/gh-pages/index.md#newlines
+         */
+        function formParagraphs( $text ) {
+            // Treat single linebreaks as double linebreaks
+            $text = preg_replace('#([^\n])\n([^\n])#', "$1\n\n$2", $text );
+            return parent::formParagraphs( $text );
+        }
 
-        return parent::doCodeBlocks( $text );
+        /**
+         * Overload to support ```-fenced code blocks
+         * https://github.com/github/github-flavored-markdown/blob/gh-pages/index.md#fenced-code-blocks
+         */
+        function doCodeBlocks( $text ) {
+            $text = preg_replace_callback(
+                '#'       .
+                '^```'    . // Fenced code block
+                '[^\n]*$' . // No language-specific support yet
+                '\n'      . // Newline
+                '(.+?)'   . // Actual code here
+                '\n'      . // Last newline
+                '^```$'   . // End of block
+                '#ms',      // Multiline mode + dot matches newlines
+                array( $this, '_doCodeBlocks_callback' ),
+                $text
+            );
+
+            return parent::doCodeBlocks( $text );
+        }
+
     }
-
-}
+} );
 
 class ES_GHF_Markdown_Comments {
     protected $parser;
@@ -72,6 +78,10 @@ class ES_GHF_Markdown_Comments {
     }
 
     public function init() {
+        // Make sure our conditional library loading worked above
+        if ( ! class_exists( 'ES_GHF_Markdown_Parser' ) )
+            return;
+
         if ( ! $this->parser )
             $this->parser = new ES_GHF_Markdown_Parser;
 
