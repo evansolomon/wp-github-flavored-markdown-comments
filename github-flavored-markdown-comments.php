@@ -10,7 +10,7 @@ Author URI: http://evansolomon.me/
 */
 
 // Wait to load the library in case another plugin tries to do the same but doesn't check
-add_action( 'init', function(){
+add_action( 'init', function() {
 	// Base markdown library
 	if ( ! class_exists( 'Markdown_Parser' ) )
 		include( __DIR__ . '/lib/markdown.php' );
