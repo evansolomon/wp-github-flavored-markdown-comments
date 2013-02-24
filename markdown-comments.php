@@ -51,3 +51,30 @@ class ES_GH_Markdown_Parser extends MarkdownExtra_Parser {
     }
 
 }
+
+class ES_Markdown_Comments {
+    protected $parser;
+
+    public function __construct() {
+        add_action( 'init', array( $this, 'init' ) );
+
+        // Just in case another plugin loads the Markdown lib with the WP stuff turned on
+        @define( 'MARKDOWN_WP_POSTS', false );
+        @define( 'MARKDOWN_WP_COMMENTS', false );
+    }
+
+    public function init() {
+        if ( ! $this->parser )
+            $this->parser = new ES_GH_Markdown_Parser;
+
+        // Markdown-ify comments
+        add_filter( 'pre_comment_content', array( $this, 'markdown' ) , 6  );
+        return $this;
+    }
+
+    public function markdown( $text ) {
+        return $this->parser->transform($text);
+    }
+}
+
+new ES_Markdown_Comments;
