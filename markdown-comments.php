@@ -54,8 +54,16 @@ class ES_GH_Markdown_Parser extends MarkdownExtra_Parser {
 
 class ES_Markdown_Comments {
     protected $parser;
+    private static $instance;
 
-    public function __construct() {
+    public static function get_instance() {
+        if ( ! self::$instance )
+            self::$instance = new self;
+
+        return self::$instance;
+    }
+
+    private function __construct() {
         add_action( 'init', array( $this, 'init' ) );
 
         // Just in case another plugin loads the Markdown lib with the WP stuff turned on
@@ -77,4 +85,4 @@ class ES_Markdown_Comments {
     }
 }
 
-new ES_Markdown_Comments;
+ES_Markdown_Comments::get_instance();
