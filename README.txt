@@ -3,7 +3,7 @@ Contributors: evansolomon
 Tags: github, markdown, comments
 Requires at least: 3.4
 Tested up to: 3.5.1
-Stable tag: trunk
+Stable tag: 1.0
 
 WordPress plugin to let commenters use (GitHub-flavored) Markdown, and turn it into HTML.
 
